@@ -5,7 +5,7 @@ metadata:
   namespace: taskapp
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
@@ -17,6 +17,13 @@ spec:
   - host: taskapp.okeydiyoke.com.ng
     http:
       paths:
+      - path: /api
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
       - path: /
         pathType: Prefix
         backend:
