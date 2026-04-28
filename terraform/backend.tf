@@ -1,0 +1,26 @@
+terraform {
+  required_version = ">= 1.6.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  backend "s3" {
+    bucket         = "taskapp-tf-state-292828418167"
+    key            = "taskapp/terraform.tfstate"
+    region         = "eu-north-1"
+    dynamodb_table = "taskapp-tf-locks"
+    encrypt        = true
+  }
+}
+provider "aws" {
+  region = var.aws_region
+  default_tags {
+    tags = {
+      Project     = "taskapp-capstone"
+      ManagedBy   = "terraform"
+      Environment = var.environment
+    }
+  }
+}

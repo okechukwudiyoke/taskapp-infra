@@ -1,0 +1,17 @@
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+!terraform.tfvars.example
+kops-key*
+*.pem
+*.key
+.env
+.env.*
+credentials
+.DS_Store
+.vscode/
+*.swp
+sealed-secrets-key*
