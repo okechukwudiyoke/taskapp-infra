@@ -1,0 +1,123 @@
+
+Results #1-5 HIGH IAM policy document uses wildcarded action 'ec2:*' (5 similar results)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  modules/iam/main.tf:36
+   via main.tf:7-10 (module.iam)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   32    resource "aws_iam_role_policy" "masters" {
+   ..  
+   36  [     Version = "2012-10-17"
+   ..  
+   50    }
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Individual Causes
+  - modules/iam/main.tf:7-10 (module.iam) 5 instances
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+          ID aws-iam-no-policy-wildcards
+      Impact Overly permissive policies may grant access to sensitive resources
+  Resolution Specify the exact permissions required, and to which resources they should apply instead of using wildcards.
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.14/checks/aws/iam/no-policy-wildcards/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Results #6-7 HIGH IAM policy document uses wildcarded action 'ec2:Describe*' (2 similar results)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  modules/iam/main.tf:66
+   via main.tf:7-10 (module.iam)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   62    resource "aws_iam_role_policy" "nodes" {
+   ..  
+   66  [     Version = "2012-10-17"
+   ..  
+   80    }
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Individual Causes
+  - modules/iam/main.tf:7-10 (module.iam) 2 instances
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+          ID aws-iam-no-policy-wildcards
+      Impact Overly permissive policies may grant access to sensitive resources
+  Resolution Specify the exact permissions required, and to which resources they should apply instead of using wildcards.
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.14/checks/aws/iam/no-policy-wildcards/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Results #8-10 HIGH Subnet associates public IP address. (3 similar results)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  modules/vpc/main.tf:24
+   via main.tf:1-6 (module.vpc)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   19    resource "aws_subnet" "public" {
+   ..  
+   24  [   map_public_ip_on_launch = true (true)
+   ..  
+   31    }
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Individual Causes
+  - modules/vpc/main.tf:1-6 (module.vpc) 3 instances
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-no-public-ip-subnet
+      Impact The instance is publicly accessible
+  Resolution Set the instance to not be publicly accessible
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.14/checks/aws/ec2/no-public-ip-subnet/
+  - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet#map_public_ip_on_launch
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+Result #11 MEDIUM VPC Flow Logs is not enabled for VPC  
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  modules/vpc/main.tf:6-14
+   via main.tf:1-6 (module.vpc)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    6    resource "aws_vpc" "main" {
+    7      cidr_block           = var.vpc_cidr
+    8      enable_dns_support   = true
+    9      enable_dns_hostnames = true
+   10      tags = {
+   11        Name                                        = "taskapp-vpc"
+   12        "kubernetes.io/cluster/${var.cluster_name}" = "shared"
+   13      }
+   14    }
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+          ID aws-ec2-require-vpc-flow-logs-for-all-vpcs
+      Impact Without VPC flow logs, you risk not having enough information about network traffic flow to investigate incidents or identify security issues.
+  Resolution Enable flow logs for VPC
+
+  More Information
+  - https://aquasecurity.github.io/tfsec/v1.28.14/checks/aws/ec2/require-vpc-flow-logs-for-all-vpcs/
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  timings
+  ──────────────────────────────────────────
+  disk i/o             181.818µs
+  parsing              14.861439ms
+  adaptation           964.548µs
+  checks               6.432662ms
+  total                22.440467ms
+
+  counts
+  ──────────────────────────────────────────
+  modules downloaded   0
+  modules processed    4
+  blocks processed     57
+  files read           13
+
+  results
+  ──────────────────────────────────────────
+  passed               28
+  ignored              0
+  critical             0
+  high                 10
+  medium               1
+  low                  0
+
+  28 passed, 11 potential problem(s) detected.
+
