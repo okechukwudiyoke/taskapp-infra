@@ -15,3 +15,4 @@ credentials
 .vscode/
 *.swp
 sealed-secrets-key*
+k8s/app/postgres-secret.yaml
